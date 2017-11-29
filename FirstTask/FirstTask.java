@@ -58,8 +58,10 @@ public class FirstTask {
                 mMin = 0;
                 mAverage = 0;
                 mNorm = 0;
+                mArrayChanged = true;
+                mSorted = false;
             } else {
-                //throw exeption
+                throw new NegativeArraySizeException();
             }
         }
 
@@ -70,16 +72,16 @@ public class FirstTask {
         //may be return element
         public void setElement(int i, double value) {
             if (i > mArray.length - 1) {
-                //throw exeption
-                return;
+                throw new ArrayIndexOutOfBoundsException();
             }
+            mArrayChanged = true;
+            mSorted = false;
             mArray[i] = value;
             return;
         }
         public double getElement(int i) {
             if (i > mArray.length - 1) {
-                //throw exeption
-                return -1;
+                throw new ArrayIndexOutOfBoundsException();
             }
             return mArray[i];
         }
@@ -94,8 +96,11 @@ public class FirstTask {
             return -1;
         }
 
-        //TODO add variable sorted
         public void sort() {
+            if (mSorted == true) {
+                return;
+            }
+            mSorted = true;
             for (int i = 0; i < mArray.length; ++i) {
                 for (int j = i + 1; j < mArray.length; ++j) {
                     if (mArray[j] < mArray[i]) {
@@ -109,6 +114,10 @@ public class FirstTask {
 
         // FIXME: How to avoid overflow?
         public double getNorm() {
+            if (mArrayChanged == false) {
+                return mNorm;
+            }
+            mArrayChanged = false;
             double sum = 0;
             for (int i = 0; i < mArray.length; ++i) {
                 sum += mArray[i] * mArray[i];
@@ -119,7 +128,11 @@ public class FirstTask {
 
         //FIXME: Find a way - How to avoid overflow
         public double getAverage() {
-	//Add mChanged here
+            if (mArrayChanged == false) {
+                return mAverage;
+            }
+            mArrayChanged = false;
+
             double sum = 0;
             for (int i = 0; i < mArray.length; ++i) {
                 sum += mArray[i];
@@ -130,9 +143,17 @@ public class FirstTask {
         }
 
         public double getMax() {
-            if (mArray.length == 0) {
-                //throw exeption;
+            if (mArrayChanged == false) {
+                return mMax;
             }
+
+            if (mArray.length == 0) {
+                // can not be such condition
+                throw new IllegalStateException();
+            }
+
+            mArrayChanged = false;
+
             mMax = mArray[0];
             for (int i = 0; i < mArray.length; ++i) {
                 if (mArray[i] > mMax) {
@@ -143,9 +164,16 @@ public class FirstTask {
         }
 
         public double getMin() {
-            if (mArray.length == 0) {
-                //throw exeption;
+            if (mArrayChanged == false) {
+                return mMin;
             }
+
+            if (mArray.length == 0) {
+                throw new IllegalStateException();
+            }
+
+            mArrayChanged = false;
+
             mMax = mArray[0];
             for (int i = 0; i < mArray.length; ++i) {
                 if (mArray[i] < mMax) {
@@ -222,8 +250,11 @@ public class FirstTask {
         private double mMax;
         private double mMin;
         private double mNorm;
+        private boolean mArrayChanged;
+        private boolean mSorted;
     }
 }
 
 //TODO: probably better to change to local size virable in order to save Time
-//TODO: add mVectorChanged  flag
+//TODO: add private function like CheckChanged() (check if mArrayChanged = true -> set to false)
+//TODO: add check of array size to all functions
