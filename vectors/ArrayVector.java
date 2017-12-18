@@ -1,6 +1,6 @@
 package vectors;
 
-public class ArrayVector {
+public class ArrayVector implements IVector {
 
     public ArrayVector(int size) {
         if (size > 0) {
@@ -16,11 +16,13 @@ public class ArrayVector {
         }
     }
 
+    @Override
     public int getSize() {
         return mArray.length;
     }
 
     //may be return element
+    @Override
     public void setElement(int i, double value) {
         if (i > mArray.length - 1) {
             throw new ArrayIndexOutOfBoundsException();
@@ -30,6 +32,8 @@ public class ArrayVector {
         mArray[i] = value;
         return;
     }
+
+    @Override
     public double getElement(int i) {
         if (i > mArray.length - 1) {
             throw new ArrayIndexOutOfBoundsException();
@@ -63,7 +67,7 @@ public class ArrayVector {
         }
     }
 
-    // FIXME: How to avoid overflow?
+    @Override
     public double getNorm() {
         if (mArrayChanged == false) {
             return mNorm;
@@ -132,67 +136,6 @@ public class ArrayVector {
             }
         }
         return mMax;
-    }
-
-//Static methods:
-
-    public static ArrayVector mult(ArrayVector vector, int num) {
-        int size = vector.getSize();
-        ArrayVector tmp = new ArrayVector(size);
-        for (int i = 0; i < size; ++i) {
-            tmp.setElement(i, vector.getElement(i) * num);
-        }
-        return tmp;
-    }
-
-    public static ArrayVector sum(ArrayVector lvl, ArrayVector rvl) {
-        int sizeLvl = lvl.getSize();
-        int sizeRvl = rvl.getSize();
-        int minSize = (sizeLvl < sizeRvl) ? sizeLvl : sizeRvl;
-        int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
-        ArrayVector tmp = new ArrayVector(maxSize);
-        int i = 0;
-        for (i = 0; i < minSize; ++i) {
-            tmp.setElement(i, lvl.getElement(i) + rvl.getElement(i));
-        }
-        //return if same vectors size
-        if (sizeLvl == sizeRvl) {
-            return tmp;
-        }
-
-        //continue fill new ArrayVector with a tail of biggestVector
-        ArrayVector linkToBiggerVector = (sizeLvl > sizeRvl) ? lvl : rvl;
-        for (; i < maxSize; ++i) {
-            tmp.setElement(i, linkToBiggerVector.getElement(i));
-        }
-
-        return tmp;
-    }
-
-    //still overflow problem
-    public static ArrayVector scalarMult(ArrayVector lvl, ArrayVector rvl) {
-        int sizeLvl = lvl.getSize();
-        int sizeRvl = rvl.getSize();
-        int minSize = (sizeLvl < sizeRvl) ? sizeLvl : sizeRvl;
-        int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
-        ArrayVector tmp = new ArrayVector(maxSize);
-        int i = 0;
-        for (i = 0; i < minSize; ++i) {
-            tmp.setElement(i, lvl.getElement(i) * rvl.getElement(i));
-            System.out.println(" " + tmp.getElement(i));
-        }
-        //return if same vectors size
-        if (sizeLvl == sizeRvl) {
-            return tmp;
-        }
-
-        //continue fill new ArrayVector with a tail of biggestVector
-        ArrayVector linkToBiggerVector = (sizeLvl > sizeRvl) ? lvl : rvl;
-        for (; i < maxSize; ++i) {
-            tmp.setElement(i, linkToBiggerVector.getElement(i));
-        }
-
-        return tmp;
     }
 
     //variables:
