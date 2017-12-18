@@ -1,6 +1,8 @@
+package vectors;
+
 public class LinkedListVector implements IVector {
 
-    LinkedListVector() {
+    public LinkedListVector() {
         mSize = 0;
 
         mHead.prev = mHead;

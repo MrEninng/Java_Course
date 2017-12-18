@@ -1,3 +1,5 @@
+package vectors;
+
 public interface IVector {
     int     getSize();
     double  getElement(int i);

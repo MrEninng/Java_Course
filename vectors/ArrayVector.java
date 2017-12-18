@@ -1,3 +1,5 @@
+package vectors;
+
 public class ArrayVector {
 
     public ArrayVector(int size) {
