@@ -2,22 +2,46 @@ package vectors;
 
 public class SVectors {
 
+    /**
+     *
+     * @param vector - Input vector (that implements IVector)
+     * @param num - Number for mult
+     * @return - ArrayVector(in IVector representation) where outputVector[i] =vector[i] * num
+     */
     public static IVector mult(IVector vector, int num) {
         int size = vector.getSize();
-        IVector tmp = new ArrayVector(size);
+        IVector tmp;
+        try {
+            tmp = new ArrayVector(size);
+        } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
+            System.out.println("Error: IncompatibleVectorSizesException");
+            return null;
+        }
         for (int i = 0; i < size; ++i) {
             tmp.setElement(i, vector.getElement(i) * num);
         }
         return tmp;
     }
 
+    /**
+     *
+     * @param lvl - leftvalue Vector that implements IVector
+     * @param rvl - rightvalue Vector that implements IVector
+     * @return - ArrayVector(in IVector representation) where Vector[i] = lvl[i] + rvl[i]
+     */
     public static IVector sum(IVector lvl, IVector rvl) {
         int sizeLvl = lvl.getSize();
         int sizeRvl = rvl.getSize();
         int minSize = (sizeLvl < sizeRvl) ? sizeLvl : sizeRvl;
         int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
-        IVector tmp = new ArrayVector(maxSize);
-        int i = 0;
+        IVector tmp;
+        try {
+            tmp = new ArrayVector(maxSize);
+        } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
+            System.out.println("Error: IncompatibleVectorSizesException");
+            return null;
+        }
+        int i;
         for (i = 0; i < minSize; ++i) {
             tmp.setElement(i, lvl.getElement(i) + rvl.getElement(i));
         }
@@ -35,14 +59,25 @@ public class SVectors {
         return tmp;
     }
 
-    //still overflow problem
+    /**
+     *
+     * @param lvl - leftvalue Vector that implements IVector
+     * @param rvl - rightvalue Vector that implements IVector
+     * @return - ArrayVector(in IVector representation) where Vector[i] = lvl[i] * rvl[i]
+     */
     public static IVector scalarMult(IVector lvl, IVector rvl) {
         int sizeLvl = lvl.getSize();
         int sizeRvl = rvl.getSize();
         int minSize = (sizeLvl < sizeRvl) ? sizeLvl : sizeRvl;
         int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
-        IVector tmp = new ArrayVector(maxSize);
-        int i = 0;
+        IVector tmp;
+        try {
+            tmp = new ArrayVector(maxSize);
+        } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
+            System.out.println("Error: IncompatibleVectorSizesException");
+            return null;
+        }
+        int i;
         for (i = 0; i < minSize; ++i) {
             tmp.setElement(i, lvl.getElement(i) * rvl.getElement(i));
         }

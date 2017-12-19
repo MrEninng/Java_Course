@@ -2,7 +2,12 @@ package vectors;
 
 public class ArrayVector implements IVector {
 
-    public ArrayVector(int size) {
+    /**
+     * Create Vector with
+     * @param size - Vector size
+     * @throws VectorsExceptions.IncompatibleVectorSizesException in case of negative size
+     */
+    public ArrayVector(int size) throws VectorsExceptions.IncompatibleVectorSizesException {
         if (size > 0) {
             mArray = new double[size];
             mMax = 0;
@@ -12,20 +17,29 @@ public class ArrayVector implements IVector {
             mArrayChanged = true;
             mSorted = false;
         } else {
-            throw new NegativeArraySizeException();
+            throw new VectorsExceptions.IncompatibleVectorSizesException(
+                                            "Can not create vector with negative size");
         }
     }
 
+    /**
+     * Return size of vector
+     * @return int Size - size of vector
+     */
     @Override
     public int getSize() {
         return mArray.length;
     }
 
-    //may be return element
+    /**
+     * Set element by index
+     * @param i - index in vector
+     * @param value - setting value
+     */
     @Override
     public void setElement(int i, double value) {
         if (i > mArray.length - 1) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         mArrayChanged = true;
         mSorted = false;
@@ -33,14 +47,24 @@ public class ArrayVector implements IVector {
         return;
     }
 
+    /**
+     *
+     * @param i - index in vector
+     * @return - value by index
+     */
     @Override
     public double getElement(int i) {
         if (i > mArray.length - 1) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         return mArray[i];
     }
 
+    /**
+     *
+     * @param value - target value to find
+     * @return - index in vector in case if value was found; else returns -1
+     */
     public int find(double value) {
         for (int i = 0; i < mArray.length ; ++i) {
             if (mArray[i] == value) {
@@ -51,6 +75,9 @@ public class ArrayVector implements IVector {
         return -1;
     }
 
+    /**
+     * Sort vector
+     */
     public void sort() {
         if (mSorted == true) {
             return;
@@ -67,6 +94,10 @@ public class ArrayVector implements IVector {
         }
     }
 
+    /**
+     * Calculate norm of vector: Norm = sqrt(E(i..n)Sum(Vector[i]^2))
+     * @return Vector Norm
+     */
     @Override
     public double getNorm() {
         if (mArrayChanged == false) {
@@ -81,6 +112,10 @@ public class ArrayVector implements IVector {
         return mNorm;
     }
 
+    /**
+     * Calculate Average value of vector
+     * @return Average value
+     */
     //FIXME: Find a way - How to avoid overflow
     public double getAverage() {
         if (mArrayChanged == false) {
@@ -97,14 +132,19 @@ public class ArrayVector implements IVector {
         return mAverage;
     }
 
-    public double getMax() {
+    /**
+     * Find Maximum value in vector
+     * @return Max
+     * @throws VectorsExceptions.IncompatibleVectorSizesException
+     */
+    public double getMax() throws VectorsExceptions.IncompatibleVectorSizesException {
         if (mArrayChanged == false) {
             return mMax;
         }
 
         if (mArray.length == 0) {
             // can not be such condition
-            throw new IllegalStateException();
+            throw new VectorsExceptions.IncompatibleVectorSizesException();
         }
 
         mArrayChanged = false;
@@ -118,13 +158,18 @@ public class ArrayVector implements IVector {
         return mMax;
     }
 
-    public double getMin() {
+    /**
+     * Find Minimum Value in vector
+     * @return Min
+     * @throws VectorsExceptions.IncompatibleVectorSizesException
+     */
+    public double getMin() throws VectorsExceptions.IncompatibleVectorSizesException {
         if (mArrayChanged == false) {
             return mMin;
         }
 
         if (mArray.length == 0) {
-            throw new IllegalStateException();
+            throw new VectorsExceptions.IncompatibleVectorSizesException();
         }
 
         mArrayChanged = false;

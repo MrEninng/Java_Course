@@ -2,6 +2,9 @@ package vectors;
 
 public class LinkedListVector implements IVector {
 
+    /**
+     * LinkedListVector constructor. Init private variables
+     */
     public LinkedListVector() {
         mSize = 0;
 
@@ -10,6 +13,10 @@ public class LinkedListVector implements IVector {
         mTail = mHead;
     }
 
+    /**
+     * Add element into tail of list (like pushBack).
+     * @param val - value to add
+     */
     public void addElement(double val) {
         if (mSize == 0) {
             mHead.value = val;
@@ -27,11 +34,14 @@ public class LinkedListVector implements IVector {
 
     }
 
+    /**
+     * Delete element by index
+     * @param i - index of element to remove
+     */
     public void deleteElement(int i) {
 
         if (i >= mSize || i < 0) {
-//            throw expetion;
-            return;
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         Node tmp = gotoNumber(i);
 
@@ -50,21 +60,37 @@ public class LinkedListVector implements IVector {
         current = prev;
     }
 
+    /**
+     * Returns size of vector
+     * @return Size of vector
+     */
     @Override
     public int getSize() {
         return mSize;
     }
 
+
+    /**
+     * Set value by index (vector[i] = val)
+     *
+     * @param i - index of element
+     * @param val - value to set
+     */
     @Override
     public void setElement(int i, double val) {
         if (i >= mSize || i < 0) {
-//            throw exception;
-            return;
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         gotoNumber(i);
         current.value = val;
     }
 
+    /**
+     * Return value by index
+     *
+     * @param i - index of element
+     * @return element by index (vector[i])
+     */
     @Override
     public double getElement(int i) {
         if (i >= mSize || i < 0) {
@@ -73,6 +99,11 @@ public class LinkedListVector implements IVector {
         gotoNumber(i);
         return current.value;
     }
+
+    /**
+     * Calculate norm of vector: Norm = sqrt(E(i..n)Sum(Vector[i]^2))
+     * @return Vector Norm
+     */
     @Override
     public double getNorm() {
         double norm;
@@ -86,33 +117,35 @@ public class LinkedListVector implements IVector {
         return norm;
     }
 
-
+    // Size of list
     private int mSize;
 
-
-    //Вспомогательный внутренний класс, реализует элемент связного списка.
+    //Private class. Node of List.
     private class Node {
-        //Значение, которое хранит элемент связного списка.
+        // Value in Node
         double value = Double.NaN;
-        //Ссылка на предыдущий элемент связного списка.
+        // Reference to previous element
         Node prev = null;
-        //Ссылка на следующий элемент связного списка.
+        // Reference to next element
         Node next = null;
     }
-    //Ссылка на голову связного списка.
+
+    // Head of list
     private Node mHead = new Node();
+    // Tail of list
     private Node mTail;
-    //Текущая длина связного списка.
-    //Ссылка на последний использовавшийся элемент связного списка.
+
+    // Last used Node in list - Speed optimisation
     private Node current = mHead;
 
-
-
-    /*Номер последнего использовавшиегося элемента связного списка. */
+    // Index of last used Node in list - Speed optimisation
     private int currentIndex = 0;
-    /*Вспомогательный метод доступа к элементу списка.
-    Должен использоваться для доступа из всех остальных методов, т.к. реализует
-    механизм "памяти". index - номер требующегося элемента*/
+
+    /**
+     * Private method for access to vector[i] element by index
+     * @param index - index of element
+     * @return Node of element
+     */
     private Node gotoNumber(int index) {
         if ((index < mSize) && (index >= 0)) {
             if (index == currentIndex) {
@@ -133,9 +166,8 @@ public class LinkedListVector implements IVector {
                 return current;
             }
         } else {
-//            //throw new VectorIndexOutOfBoundsException();
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
-
         return null;
     }
 }
