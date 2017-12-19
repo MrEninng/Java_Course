@@ -27,13 +27,16 @@ public class VectorsExceptions {
      */
     public static class IncompatibleVectorSizesException extends Exception {
         /**
-         *
-         * @param message
+         * Constructor of Exception that tells that size of vector(s) is different
+         * @param message Message for user
          */
         public IncompatibleVectorSizesException(String message) {
             super(message);
         }
 
+        /**
+         * Constructor of Exception that tells that index is out of bounds
+         */
         public IncompatibleVectorSizesException() {
             super();
         }

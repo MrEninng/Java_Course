@@ -23,8 +23,8 @@ public class LinkedListVector implements IVector {
             ++mSize;
             return;
         }
-        Node tmp = mTail;  //kek
-        mTail.next = new Node(); //sas
+        Node tmp = mTail;
+        mTail.next = new Node();
 
         mTail = mTail.next;
 

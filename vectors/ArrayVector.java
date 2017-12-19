@@ -193,6 +193,6 @@ public class ArrayVector implements IVector {
     private boolean mSorted;
 }
 
-//TODO: probably better to change to local size virable in order to save Time
+//TODO: probably better to change to local size variable in order to save Time
 //TODO: add private function like CheckChanged() (check if mArrayChanged = true -> set to false)
 //TODO: add check of array size to all functions
