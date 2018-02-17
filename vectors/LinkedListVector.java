@@ -1,6 +1,8 @@
 package vectors;
 
-public class LinkedListVector implements IVector {
+import java.io.Serializable;
+
+public class LinkedListVector implements IVector, Serializable {
 
     /**
      * LinkedListVector constructor. Init private variables
@@ -121,7 +123,7 @@ public class LinkedListVector implements IVector {
     private int mSize;
 
     //Private class. Node of List.
-    private class Node {
+    private class Node implements Serializable {
         // Value in Node
         double value = Double.NaN;
         // Reference to previous element

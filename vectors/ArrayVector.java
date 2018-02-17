@@ -1,6 +1,8 @@
 package vectors;
 
-public class ArrayVector implements IVector {
+import java.io.Serializable;
+
+public class ArrayVector implements IVector, Serializable {
 
     /**
      * Create Vector with
