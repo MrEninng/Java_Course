@@ -1,5 +1,8 @@
 package vectors;
 
+import java.io.*;
+import java.nio.CharBuffer;
+
 public class SVectors {
 
     /**
@@ -93,5 +96,90 @@ public class SVectors {
         }
 
         return tmp;
+    }
+
+    /**
+     * Write Vectors size and values into BYTE stream
+     * @param v - input vector
+     * @param output - Byte stream to write
+     */
+    public static void outputVector(IVector v, OutputStream output) {
+        DataOutputStream out = new DataOutputStream(output);
+        try {
+            out.writeInt(v.getSize());
+            for (int i = 0; i < v.getSize(); ++i) {
+                out.writeDouble(v.getElement(i));
+            }
+
+        } catch (IOException ex) {
+            System.out.println("Error " + ex.getMessage());
+        }
+        return;
+    }
+
+
+    /**
+     * Read values from BYTE input stream
+     * @param input - Byte Input Stream
+     * @return new ArrayVector
+     */
+    public static IVector inputVector(InputStream input) {
+        IVector v = null;
+        DataInputStream in = new DataInputStream(input);
+        try {
+            int size = in.readInt();
+            v = new ArrayVector(size);
+            for (int i = 0; i < size; ++i) {
+                v.setElement(i, in.readDouble());
+            }
+        } catch (IOException | VectorsExceptions.IncompatibleVectorSizesException ex) {
+            System.out.println("Error " + ex.getMessage());
+        }
+        return v;
+    }
+
+    /**
+     * Write vector values into OutputStream
+     * @param v Input Vector
+     * @param output OutputStream to write
+     */
+    public static void writeVector(IVector v, Writer output) {
+        int size = v.getSize();
+        PrintWriter out = new PrintWriter(output);
+        out.write("" + size + " ");
+        for (int i = 0; i < size; ++i) {
+            out.write("" + v.getElement(i) + " ");
+        }
+        out.flush();
+        return;
+    }
+
+    /**
+     *
+     * Create new Array Vector using values from symbol input stream
+     * Input stream format: SIZE VALUE[0] ... VALUE[SIZE - 1]
+     * @param input - input Reader
+     * @return new Array Vector
+     * @throws ArrayIndexOutOfBoundsException In case if there is not enough values in input stream
+     */
+    public static IVector readVector(Reader input) throws ArrayIndexOutOfBoundsException {
+        BufferedReader in = new BufferedReader(input);
+        IVector v = null;
+        try {
+            String s = in.readLine();
+            String[] tokens = s.split(" "); //Split by spaces
+            int size = Integer.parseInt(tokens[0]);
+            v = new ArrayVector(size);
+            if (tokens.length < size + 1) {
+                throw new ArrayIndexOutOfBoundsException("Not Enough values in input stream");
+            }
+            for (int i = 0; i < size; ++i) {
+                v.setElement(i, Double.parseDouble(tokens[i + 1]));
+            }
+
+        } catch (IOException | VectorsExceptions.IncompatibleVectorSizesException ex) {
+            System.out.println("Error " + ex.getMessage());
+        }
+        return v;
     }
 }
