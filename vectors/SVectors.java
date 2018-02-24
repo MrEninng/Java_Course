@@ -212,5 +212,7 @@ public class SVectors {
         return mFactory.createInstance(size);
     }
 
-
+    public static IVector synchronizedVector(IVector v) {
+        return new SynchronizedVector(v);
+    }
 }

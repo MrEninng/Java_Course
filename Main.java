@@ -5,7 +5,8 @@ public class Main {
     public static void main(String... s) throws VectorsExceptions.IncompatibleVectorSizesException {
 
         IVector v = SVectors.createInstance(15);
-        VectorSynchronizer vs = new VectorSynchronizer(v);
+        IVector sv = SVectors.synchronizedVector(v);
+        VectorSynchronizer vs = new VectorSynchronizer(sv);
 
         ReadRunnable rr = new ReadRunnable(vs);
         Thread readThread = new Thread(rr);
