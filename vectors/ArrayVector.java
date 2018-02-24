@@ -274,6 +274,19 @@ public class ArrayVector implements IVector, Serializable {
     public Iterator iterator() {
         return new ArrayVectorIterator(this);
     }
+
+    public static class ArrayVectorFactory implements IVectorFactory {
+        @Override
+        public IVector createInstance(int size) {
+            ArrayVector av = null;
+            try {
+                av = new ArrayVector(size);
+            } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
+                System.out.println(e.getMessage());
+            }
+            return av;
+        }
+    }
 }
 
 //TODO: probably better to change to local size variable in order to save Time

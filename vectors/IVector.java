@@ -40,6 +40,4 @@ public interface IVector {
      * @return Iterator
      */
     java.util.Iterator iterator();
-
-
 }

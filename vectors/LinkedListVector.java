@@ -223,4 +223,15 @@ public class LinkedListVector implements IVector, Serializable {
     public Iterator iterator() {
         return new LinkedListVectorIterator(this);
     }
+
+    public static class LinkedListVectorFactory implements IVectorFactory {
+        @Override
+        public IVector createInstance(int size) {
+            LinkedListVector lv = new LinkedListVector();
+            for (int i = 0; i < size; ++i) {
+                lv.addElement(0);
+            }
+            return lv;
+        }
+    }
 }

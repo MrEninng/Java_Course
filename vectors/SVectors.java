@@ -1,21 +1,22 @@
 package vectors;
 
 import java.io.*;
-import java.nio.CharBuffer;
 
 public class SVectors {
+
+    private static IVectorFactory mFactory;
 
     /**
      *
      * @param vector - Input vector (that implements IVector)
      * @param num - Number for mult
-     * @return - ArrayVector(in IVector representation) where outputVector[i] =vector[i] * num
+     * @return - IVector where outputVector[i] =vector[i] * num
      */
     public static IVector mult(IVector vector, int num) {
         int size = vector.getSize();
         IVector tmp;
         try {
-            tmp = new ArrayVector(size);
+            tmp = createInstance(size);
         } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
             System.out.println("Error: IncompatibleVectorSizesException");
             return null;
@@ -30,7 +31,7 @@ public class SVectors {
      *
      * @param lvl - leftvalue Vector that implements IVector
      * @param rvl - rightvalue Vector that implements IVector
-     * @return - ArrayVector(in IVector representation) where Vector[i] = lvl[i] + rvl[i]
+     * @return - IVector where Vector[i] = lvl[i] + rvl[i]
      */
     public static IVector sum(IVector lvl, IVector rvl) {
         int sizeLvl = lvl.getSize();
@@ -39,7 +40,7 @@ public class SVectors {
         int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
         IVector tmp;
         try {
-            tmp = new ArrayVector(maxSize);
+            tmp = createInstance(maxSize);
         } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
             System.out.println("Error: IncompatibleVectorSizesException");
             return null;
@@ -53,7 +54,7 @@ public class SVectors {
             return tmp;
         }
 
-        //continue fill new ArrayVector with a tail of biggestVector
+        //continue fill new Vector with a tail of biggestVector
         IVector linkToBiggerVector = (sizeLvl > sizeRvl) ? lvl : rvl;
         for (; i < maxSize; ++i) {
             tmp.setElement(i, linkToBiggerVector.getElement(i));
@@ -66,7 +67,7 @@ public class SVectors {
      *
      * @param lvl - leftvalue Vector that implements IVector
      * @param rvl - rightvalue Vector that implements IVector
-     * @return - ArrayVector(in IVector representation) where Vector[i] = lvl[i] * rvl[i]
+     * @return - IVector where Vector[i] = lvl[i] * rvl[i]
      */
     public static IVector scalarMult(IVector lvl, IVector rvl) {
         int sizeLvl = lvl.getSize();
@@ -75,7 +76,7 @@ public class SVectors {
         int maxSize = (sizeLvl > sizeRvl) ? sizeLvl : sizeRvl;
         IVector tmp;
         try {
-            tmp = new ArrayVector(maxSize);
+            tmp = createInstance(maxSize);
         } catch (VectorsExceptions.IncompatibleVectorSizesException e) {
             System.out.println("Error: IncompatibleVectorSizesException");
             return null;
@@ -89,7 +90,7 @@ public class SVectors {
             return tmp;
         }
 
-        //continue fill new ArrayVector with a tail of biggestVector
+        //continue fill new Vector with a tail of biggestVector
         IVector linkToBiggerVector = (sizeLvl > sizeRvl) ? lvl : rvl;
         for (; i < maxSize; ++i) {
             tmp.setElement(i, linkToBiggerVector.getElement(i));
@@ -121,14 +122,14 @@ public class SVectors {
     /**
      * Read values from BYTE input stream
      * @param input - Byte Input Stream
-     * @return new ArrayVector
+     * @return new IVector
      */
     public static IVector inputVector(InputStream input) {
         IVector v = null;
         DataInputStream in = new DataInputStream(input);
         try {
             int size = in.readInt();
-            v = new ArrayVector(size);
+            v = createInstance(size);
             for (int i = 0; i < size; ++i) {
                 v.setElement(i, in.readDouble());
             }
@@ -169,7 +170,7 @@ public class SVectors {
             String s = in.readLine();
             String[] tokens = s.split(" "); //Split by spaces
             int size = Integer.parseInt(tokens[0]);
-            v = new ArrayVector(size);
+            v = createInstance(size);
             if (tokens.length < size + 1) {
                 throw new ArrayIndexOutOfBoundsException("Not Enough values in input stream");
             }
@@ -182,4 +183,34 @@ public class SVectors {
         }
         return v;
     }
+
+    /**
+     * Set Array Vector Factory
+     * @param f - input factory
+     * @throws NullPointerException - in case if input factory is null
+     */
+    public static void setFactory(IVectorFactory f) throws NullPointerException {
+        if (f != null)
+            mFactory = f;
+        else
+            throw new NullPointerException("Null input VectorFactory");
+    }
+
+    /**
+     * Create Instance of IVector implementation using Size
+     * @param size - needed size of vector
+     * @return vector instance
+     */
+    public static IVector createInstance(int size)
+                                     throws VectorsExceptions.IncompatibleVectorSizesException {
+        if (size <= 0) {
+            throw new VectorsExceptions.IncompatibleVectorSizesException("Zero or less input size");
+        }
+        if (mFactory == null) {
+            mFactory =  new ArrayVector.ArrayVectorFactory();
+        }
+        return mFactory.createInstance(size);
+    }
+
+
 }
