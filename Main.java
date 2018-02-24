@@ -3,17 +3,16 @@ import vectors.*;
 public class Main {
     public static void main(String... s) throws VectorsExceptions.IncompatibleVectorSizesException {
 
-        IVector v = SVectors.createInstance(1);
-        v.deleteElement(0);
-        System.out.println(v.toString()); //check that empty array doesn't cause problems
+        IVector v = SVectors.createInstance(3);
+        IVector v2 = v;
+        System.out.println(v.equals(v2));
 
-        SVectors.setFactory(new LinkedListVector.LinkedListVectorFactory());
-        v = SVectors.createInstance(3);
-        System.out.println(v.toString());
-        int size = v.getSize();
-        for (int i = 0; i < size; ++i) {
-            v.deleteElement(0); //delete all elements (empty array);
-        }
-        System.out.println(v.toString()); //check that empty array doesn't cause problems
+        v2 = SVectors.createInstance(3);
+        System.out.println(v2.equals(v));
+
+        v2.setElement(0, 1);
+        System.out.println(v2.equals(v));
+        v2 = SVectors.createInstance(2);
+        System.out.println(v2.equals(v));
     }
 }

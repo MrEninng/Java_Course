@@ -300,6 +300,26 @@ public class ArrayVector implements IVector, Serializable {
         }
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof ArrayVector || o instanceof LinkedListVector) {
+            IVector v = (IVector)o;
+            if (getSize() != v.getSize()) {
+                return false;
+            }
+            int size = getSize();
+            for (int i = 0; i < size; ++i) {
+                if (getElement(i) != v.getElement(i))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
 }
 
 //TODO: probably better to change to local size variable in order to save Time

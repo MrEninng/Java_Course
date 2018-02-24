@@ -249,4 +249,25 @@ public class LinkedListVector implements IVector, Serializable {
         }
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof ArrayVector || o instanceof LinkedListVector) {
+            IVector v = (IVector)o;
+            if (getSize() != v.getSize()) {
+                return false;
+            }
+            int size = getSize();
+            for (int i = 0; i < size; ++i) {
+                if (getElement(i) != v.getElement(i))
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
 }
