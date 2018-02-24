@@ -3,7 +3,7 @@ package vectors;
 import java.io.Serializable;
 import java.util.Iterator;
 
-public class ArrayVector implements IVector, Serializable {
+public class ArrayVector implements IVector, Serializable, Cloneable {
 
 
     //variables:
@@ -331,6 +331,11 @@ public class ArrayVector implements IVector, Serializable {
             result ^= (((int)(t>>32)^(int)(t&0x00000000FFFFFFFF)));
         }
         return result;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
 

@@ -3,7 +3,7 @@ package vectors;
 import java.io.Serializable;
 import java.util.Iterator;
 
-public class LinkedListVector implements IVector, Serializable {
+public class LinkedListVector implements IVector, Serializable, Cloneable {
 
     /**
      * LinkedListVector constructor. Init private variables
@@ -283,5 +283,10 @@ public class LinkedListVector implements IVector, Serializable {
             curr = curr.next;
         }
         return result;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
