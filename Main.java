@@ -3,35 +3,37 @@ import vectors.*;
 public class Main {
     public static void main(String... s) throws VectorsExceptions.IncompatibleVectorSizesException {
 
-        ArrayVector av = (ArrayVector)SVectors.createInstance(5);
+        ArrayVector av = new ArrayVector(5);
         av.setElement(0, 2);
-        av.setElement(3, 4);
-        av.setElement(4, 2.1);
-        ArrayVector av2 = null;
-        try {
-            av2 = (ArrayVector)av.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        av2.setElement(0, 0.282);
-        System.out.println(av2.toString());
+        av.setElement(1, 2.3);
+        av.setElement(4, 0.21);
 
-        SVectors.setFactory(new LinkedListVector.LinkedListVectorFactory());
-        LinkedListVector v = (LinkedListVector)SVectors.createInstance(3);
-        v.setElement(0, 2);
-        v.setElement(1, 3);
-        v.setElement(2, 0.2);
-
-        LinkedListVector v2 = null;
+        UnmodifiableVector uav = new  UnmodifiableVector(av);
         try {
-            v2 = (LinkedListVector) v.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            uav.deleteElement(0);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
-        v2.setElement(2, 2.232);
-        v2.addElement(0.211);
-        System.out.println(v2.toString());
+        for (int i = 0; i < uav.getSize(); ++i) {
+            System.out.println(uav.getElement(i));
+        }
+
+        LinkedListVector lv = new LinkedListVector();
+        lv.addElement(0.6);
+        lv.addElement(0.0);
+        lv.addElement(2.6);
+
+        uav = new UnmodifiableVector(lv);
+        try {
+            uav.setElement(0, 3.7);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        for (int i = 0; i < uav.getSize(); ++i) {
+            System.out.println(uav.getElement(i));
+        }
 
     }
 }
