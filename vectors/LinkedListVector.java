@@ -245,7 +245,7 @@ public class LinkedListVector implements IVector, Serializable {
         while(curr != null) {
             sb.append(curr.value);
             sb.append(" ");
-            mCurrent = curr.next;
+            curr = curr.next;
         }
         return sb.toString();
     }
