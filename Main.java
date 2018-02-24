@@ -1,60 +1,45 @@
 import vectors.*;
 
-import java.io.*;
+import java.util.Iterator;
 
 public class Main {
     public static void main(String... s) throws VectorsExceptions.IncompatibleVectorSizesException {
 
-        ArrayVector v = new ArrayVector(3);
-        v.setElement(0,1);
-        v.setElement(1,2.3);
-        v.setElement(2,0.3);
 
-        try {
-            FileOutputStream fos = new FileOutputStream("temp.out");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(v);
-            oos.flush();
-            oos.close();
+        LinkedListVector lv = new LinkedListVector();
+        lv.addElement(1.0);
+        lv.addElement(5);
+        lv.addElement(0.1);
 
-            FileInputStream fis = new FileInputStream("temp.out");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            ArrayVector v2 =  (ArrayVector) ois.readObject();
-
-            System.out.println("Array Vector:");
-            System.out.println("Size: " + v2.getSize());
-            for (int i = 0; i < v2.getSize(); ++i) {
-                System.out.println("" + v2.getElement(i));
-            }
-        } catch(IOException | ClassNotFoundException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        Iterator lvI = lv.iterator();
+        while(lvI.hasNext()) {
+            System.out.println(lvI.next()); // Here 1st element is missed because next() returns
+                                            // value of Next element and moves iterator
         }
         System.out.println("");
-        LinkedListVector lv = new LinkedListVector();
-        lv.addElement(5);
-        lv.addElement(7.3);
-        lv.addElement(1.3);
-        lv.addElement(11.3);
-        lv.addElement(100.32);
-        try {
-            FileOutputStream fos = new FileOutputStream("tempLV.out");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(lv);
-            oos.flush();
-            oos.close();
 
-            FileInputStream fis = new FileInputStream("tempLV.out");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            LinkedListVector lv2 =  (LinkedListVector) ois.readObject();
+        ArrayVector av = new ArrayVector(3);
+        av.setElement(0, 2);
+        av.setElement(1, 1.32);
+        av.setElement(2, 0.2);
 
-            System.out.println("SizeLV: " + lv2.getSize());
-            for (int i = 0; i < lv2.getSize(); ++i) {
-                System.out.println("" + lv2.getElement(i));
-            }
-        } catch(IOException | ClassNotFoundException ex) {
-            System.out.println("Error: " + ex.getMessage());
+        Iterator avI = av.iterator();
+        while(avI.hasNext()) {
+            System.out.println(avI.next()); //Same as for lvI (first element is missed)
         }
 
-    }
+        System.out.println("");
+        avI = av.iterator(); // Get at the beginning
+        avI.remove();
+        while(avI.hasNext()) {
+            System.out.println(avI.next()); //Same as for lvI (first element is missed)
+        }
 
+        System.out.println("");
+        lvI = lv.iterator();
+        lvI.remove();
+        while (lvI.hasNext()) {
+            System.out.println(lvI.next());
+        }
+    }
 }

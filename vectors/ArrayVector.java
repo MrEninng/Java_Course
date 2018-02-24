@@ -1,8 +1,19 @@
 package vectors;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 public class ArrayVector implements IVector, Serializable {
+
+
+    //variables:
+    private double[] mArray;
+    private double mAverage;
+    private double mMax;
+    private double mMin;
+    private double mNorm;
+    private boolean mArrayChanged;
+    private boolean mSorted;
 
     /**
      * Create Vector with
@@ -47,6 +58,33 @@ public class ArrayVector implements IVector, Serializable {
         mSorted = false;
         mArray[i] = value;
         return;
+    }
+
+    /**
+     * Delete element from vector by index
+     *
+     * @param idx - index of element to delete
+     */
+    @Override
+    public void deleteElement(int idx) {
+        int size = getSize();
+        if (size == 0 || idx >= size || idx < 0) {
+            throw new VectorsExceptions.VectorIndexOutOfBoundsException("Wrong idx to delete");
+        }
+        mArrayChanged = true;
+        if (size == 1) {
+            mArray = null;
+            return;
+        }
+        double[] newArray = new double[size - 1];
+        int j = 0;
+        for (int i = 0; i < size; ++i) {
+            if (i != idx) {
+                newArray[j] = mArray[i];
+                ++j;
+            }
+        }
+        mArray = newArray; //Garbage collector will remove old array
     }
 
     /**
@@ -185,14 +223,57 @@ public class ArrayVector implements IVector, Serializable {
         return mMax;
     }
 
-    //variables:
-    private double[] mArray;
-    private double mAverage;
-    private double mMax;
-    private double mMin;
-    private double mNorm;
-    private boolean mArrayChanged;
-    private boolean mSorted;
+    public class ArrayVectorIterator implements Iterator {
+
+        private ArrayVector mAggregate = null;
+        private int mCurrent = -1;
+        private int mLength;
+
+        /**
+         * @param v Aggregatable vector
+         */
+        public ArrayVectorIterator(ArrayVector v) {
+            mAggregate = v;
+            mLength = v.getSize();
+            if (mLength != 0) {
+                mCurrent = 0;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (mCurrent != -1 && mCurrent < mLength - 1)
+                return true;
+            return false;
+        }
+
+        @Override
+        public Object next() {
+            if (mCurrent != -1 && mCurrent < mLength - 1) {
+                mCurrent++;
+                return mAggregate.getElement(mCurrent);
+            }
+            return null;
+        }
+        public void remove() {
+            if (mCurrent == -1 || mLength == 0) {
+                return; //Array is empty
+            }
+            mAggregate.deleteElement(mCurrent);
+            mLength--;
+            if (mCurrent == 0 && mLength == 0) {
+                mCurrent = -1; // Empty array
+            }
+            if (mCurrent == mLength) {
+                mCurrent--; // Get Previous element
+            }
+        }
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new ArrayVectorIterator(this);
+    }
 }
 
 //TODO: probably better to change to local size variable in order to save Time

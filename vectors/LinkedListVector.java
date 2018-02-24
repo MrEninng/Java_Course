@@ -1,6 +1,7 @@
 package vectors;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 public class LinkedListVector implements IVector, Serializable {
 
@@ -171,5 +172,55 @@ public class LinkedListVector implements IVector, Serializable {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         return null;
+    }
+
+    public Node getHead() {
+        return mHead;
+    }
+
+    public class LinkedListVectorIterator implements Iterator {
+
+        private LinkedListVector.Node mHead;
+        private LinkedListVector.Node mCurrent;
+
+        LinkedListVectorIterator(LinkedListVector v) {
+            mHead = v.getHead();
+            mCurrent = mHead;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (mCurrent != null && mCurrent.next != null) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public Object next() {
+            if (hasNext()) {
+                mCurrent = mCurrent.next;
+                return mCurrent.value;
+            }
+            return null;
+        }
+
+        @Override
+        public void remove() {
+            if (mCurrent == null)
+                return;
+            if (mCurrent == mHead) {
+                mHead = mCurrent.next;
+                mCurrent = mCurrent.next;
+                return;
+            }
+
+            mCurrent.prev = mCurrent.next;
+            mCurrent = mCurrent.prev; //get last element;
+        }
+    }
+    @Override
+    public Iterator iterator() {
+        return new LinkedListVectorIterator(this);
     }
 }
