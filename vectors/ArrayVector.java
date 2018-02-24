@@ -53,7 +53,7 @@ public class ArrayVector implements IVector, Serializable, Cloneable {
      * @param value - setting value
      */
     @Override
-    public void setElement(int i, double value) {
+    public synchronized void setElement(int i, double value) {
         if (i > mArray.length - 1) {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
@@ -69,7 +69,7 @@ public class ArrayVector implements IVector, Serializable, Cloneable {
      * @param idx - index of element to delete
      */
     @Override
-    public void deleteElement(int idx) {
+    public synchronized void deleteElement(int idx) {
         int size = getSize();
         if (size == 0 || idx >= size || idx < 0) {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException("Wrong idx to delete");
@@ -96,7 +96,7 @@ public class ArrayVector implements IVector, Serializable, Cloneable {
      * @return - value by index
      */
     @Override
-    public double getElement(int i) {
+    public synchronized double getElement(int i) {
         if (i > mArray.length - 1) {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }

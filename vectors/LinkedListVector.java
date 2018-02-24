@@ -20,7 +20,7 @@ public class LinkedListVector implements IVector, Serializable, Cloneable {
      * Add element into tail of list (like pushBack).
      * @param val - value to add
      */
-    public void addElement(double val) {
+    public synchronized void addElement(double val) {
         if (mSize == 0) {
             mHead.value = val;
             ++mSize;
@@ -41,7 +41,7 @@ public class LinkedListVector implements IVector, Serializable, Cloneable {
      * Delete element by index
      * @param i - index of element to remove
      */
-    public void deleteElement(int i) {
+    public synchronized void deleteElement(int i) {
 
         if (i >= mSize || i < 0) {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
@@ -83,7 +83,7 @@ public class LinkedListVector implements IVector, Serializable, Cloneable {
      * @param val - value to set
      */
     @Override
-    public void setElement(int i, double val) {
+    public synchronized void setElement(int i, double val) {
         if (i >= mSize || i < 0) {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
@@ -98,7 +98,7 @@ public class LinkedListVector implements IVector, Serializable, Cloneable {
      * @return element by index (vector[i])
      */
     @Override
-    public double getElement(int i) {
+    public synchronized double getElement(int i) {
         if (i >= mSize || i < 0) {
 //            throw exception;
         }
