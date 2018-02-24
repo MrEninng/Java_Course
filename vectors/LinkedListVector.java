@@ -54,16 +54,16 @@ public class LinkedListVector implements IVector, Serializable {
         if (i == 0) {
             mHead = tmp.next;
             --mSize;
-            current = mHead;
-            currentIndex = 0;
+            mCurrent = mHead;
+            mCurrentIndex = 0;
             return;
         }
         Node prev = tmp.prev;
         prev.next = tmp.next;
 
         --mSize;
-        currentIndex--;
-        current = prev;
+        mCurrentIndex--;
+        mCurrent = prev;
     }
 
     /**
@@ -88,7 +88,7 @@ public class LinkedListVector implements IVector, Serializable {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         gotoNumber(i);
-        current.value = val;
+        mCurrent.value = val;
     }
 
     /**
@@ -103,7 +103,7 @@ public class LinkedListVector implements IVector, Serializable {
 //            throw exception;
         }
         gotoNumber(i);
-        return current.value;
+        return mCurrent.value;
     }
 
     /**
@@ -142,10 +142,10 @@ public class LinkedListVector implements IVector, Serializable {
     private Node mTail;
 
     // Last used Node in list - Speed optimisation
-    private Node current = mHead;
+    private Node mCurrent = mHead;
 
     // Index of last used Node in list - Speed optimisation
-    private int currentIndex = 0;
+    private int mCurrentIndex = 0;
 
     /**
      * Private method for access to vector[i] element by index
@@ -154,22 +154,22 @@ public class LinkedListVector implements IVector, Serializable {
      */
     private Node gotoNumber(int index) {
         if ((index < mSize) && (index >= 0)) {
-            if (index == currentIndex) {
-                return current;
+            if (index == mCurrentIndex) {
+                return mCurrent;
             }
 
-            if (index > currentIndex) {
-                while (index != currentIndex) {
-                    current = current.next;
-                    ++currentIndex;
+            if (index > mCurrentIndex) {
+                while (index != mCurrentIndex) {
+                    mCurrent = mCurrent.next;
+                    ++mCurrentIndex;
                 }
-                return current;
-            } else if (index < currentIndex){
-                while (index != currentIndex) {
-                    current = current.prev;
-                    --currentIndex;
+                return mCurrent;
+            } else if (index < mCurrentIndex){
+                while (index != mCurrentIndex) {
+                    mCurrent = mCurrent.prev;
+                    --mCurrentIndex;
                 }
-                return current;
+                return mCurrent;
             }
         } else {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
@@ -241,11 +241,11 @@ public class LinkedListVector implements IVector, Serializable {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        Node current = mHead;
-        while(current != null) {
-            sb.append(current.value);
+        Node curr = mHead;
+        while(curr != null) {
+            sb.append(curr.value);
             sb.append(" ");
-            current = current.next;
+            mCurrent = curr.next;
         }
         return sb.toString();
     }
@@ -270,4 +270,18 @@ public class LinkedListVector implements IVector, Serializable {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int result = 0;
+        long t;
+        Node curr = mHead;
+
+        while (curr != null) {
+            t = Double.doubleToLongBits(curr.value);
+            result ^= (((int)(t>>32)^(int)(t&0x00000000FFFFFFFF)));
+
+            curr = curr.next;
+        }
+        return result;
+    }
 }

@@ -320,6 +320,18 @@ public class ArrayVector implements IVector, Serializable {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        long t;
+        int size = getSize();
+        for (int i = 0; i < size; ++ i) {
+            t = Double.doubleToLongBits(mArray[i]);
+            result ^= (((int)(t>>32)^(int)(t&0x00000000FFFFFFFF)));
+        }
+        return result;
+    }
 }
 
 //TODO: probably better to change to local size variable in order to save Time
