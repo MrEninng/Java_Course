@@ -41,6 +41,9 @@ public class ArrayVector implements IVector, Serializable {
      */
     @Override
     public int getSize() {
+        if (mArray == null ) {
+            return 0;
+        }
         return mArray.length;
     }
 
@@ -286,6 +289,16 @@ public class ArrayVector implements IVector, Serializable {
             }
             return av;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < getSize(); ++i) {
+            sb.append(mArray[i]);
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 }
 

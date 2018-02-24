@@ -47,6 +47,9 @@ public class LinkedListVector implements IVector, Serializable {
             throw new VectorsExceptions.VectorIndexOutOfBoundsException();
         }
         Node tmp = gotoNumber(i);
+        if (tmp == null) {
+            return;
+        }
 
         if (i == 0) {
             mHead = tmp.next;
@@ -233,5 +236,17 @@ public class LinkedListVector implements IVector, Serializable {
             }
             return lv;
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        Node current = mHead;
+        while(current != null) {
+            sb.append(current.value);
+            sb.append(" ");
+            current = current.next;
+        }
+        return sb.toString();
     }
 }
